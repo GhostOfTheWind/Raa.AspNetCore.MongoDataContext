@@ -23,7 +23,7 @@ namespace Raa.AspNetCore.MongoDataContext
             }
             catch (Exception ex)
             {
-                throw new Exception("Can not access to db server.", ex);
+                throw new Exception("Can not access to db server. ", ex);
             }
         }
     }
