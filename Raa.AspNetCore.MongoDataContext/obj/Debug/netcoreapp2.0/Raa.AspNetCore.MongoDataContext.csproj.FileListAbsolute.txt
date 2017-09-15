@@ -7,3 +7,12 @@ C:\Raa\AspNet\PluralTut2\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0
 C:\Raa\AspNet\PluralTut2\Raa.AspNetCore.MongoDataContext\bin\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.pdb
 C:\Raa\AspNet\PluralTut2\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.dll
 C:\Raa\AspNet\PluralTut2\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.pdb
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\bin\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.deps.json
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\bin\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.dll
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\bin\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.pdb
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.csprojResolveAssemblyReference.cache
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.csproj.CoreCompileInputs.cache
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.AssemblyInfoInputs.cache
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.AssemblyInfo.cs
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.dll
+C:\Raa\AspNet\Raa.AspNetCore.MongoDataContext\Raa.AspNetCore.MongoDataContext\obj\Debug\netcoreapp2.0\Raa.AspNetCore.MongoDataContext.pdb
