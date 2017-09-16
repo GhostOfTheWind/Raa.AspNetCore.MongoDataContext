@@ -14,9 +14,9 @@ namespace Raa.AspNetCore.MongoDataContext.Identity
     public class RoleStore<TRole> : IRoleStore<TRole>, IQueryableRoleStore<TRole>
         where TRole : MongoIdentityRole
     {
-        Repository<TRole> _roleRepo;
+        RoleRepository<TRole> _roleRepo;
 
-        public RoleStore(Repository<TRole> roleRepo)
+        public RoleStore(RoleRepository<TRole> roleRepo)
         {
             _roleRepo = roleRepo;
         }

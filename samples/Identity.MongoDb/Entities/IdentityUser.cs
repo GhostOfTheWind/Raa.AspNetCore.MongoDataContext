@@ -1,24 +1,21 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using Raa.AspNetCore.MongoDataContext.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 
-namespace Raa.AspNetCore.MongoDataContext.Identity.Entities
+namespace Identity.MongoDb.Entities
 {
-    public class MongoIdentityUser<TKey> : IEntity<TKey>
+
+    public class IdentityUser<TKey>
         where TKey : IEquatable<TKey>
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public TKey Id { get; set; }
 
         public string UserName { get; set; }
-
-        public string NormalizedUserName { get; set; }
 
         [BsonIgnoreIfNull]
         public virtual string PasswordHash { get; set; }
@@ -29,38 +26,18 @@ namespace Raa.AspNetCore.MongoDataContext.Identity.Entities
         [BsonIgnoreIfNull]
         public List<string> Roles { get; set; }
 
-        private List<MongoIdentityUserClaim> _claims;
-        private List<MongoIdentityUserToken> _tokens;
-
         [BsonIgnoreIfNull]
-        public List<MongoIdentityUserToken> Tokens
-        {
-            get
-            {
-                if (_tokens == null) _tokens = new List<MongoIdentityUserToken>();
-                return _tokens;
-            }
-            set { _tokens = value; }
-        }
-
-        [BsonIgnoreIfNull]
-        public List<MongoIdentityUserClaim> Claims {
-            get {
-                if (_claims == null) _claims = new List<MongoIdentityUserClaim>();
-                return _claims;
-            } set { _claims = value; }
-        }
+        public List<IdentityUserClaim> Claims = new List<IdentityUserClaim>(); 
 
 
         public virtual string Email { get; set; }
-        public virtual string NormalizedEmail { get; set; }
         public virtual bool EmailConfirmed { get; set; }
 
         public virtual string PhoneNumber { get; set; }
         public virtual bool PhoneNumberConfirmed { get; set; }
 
         public virtual bool LockoutEnabled { get; set; }
-        public virtual DateTimeOffset? LockoutEndDateUtc { get; set; }
+        public virtual DateTime? LockoutEndDateUtc { get; set; }
         public virtual bool TwoFactorEnabled { get; set; }
         public virtual int AccessFailedCount { get; set; }
         public virtual string SecurityStamp { get; set; }
@@ -73,15 +50,6 @@ namespace Raa.AspNetCore.MongoDataContext.Identity.Entities
         public virtual void RemoveRole(string role)
         {
             Roles.Remove(role);
-        }
-
-        public virtual void AddToken(MongoIdentityUserToken token)
-        {
-            Tokens.Add(token);
-        }
-        public virtual void RemoveToken(MongoIdentityUserToken token)
-        {
-            Tokens.Remove(token);
         }
 
         public virtual void AddLogin(UserLoginInfo login)
@@ -99,7 +67,7 @@ namespace Raa.AspNetCore.MongoDataContext.Identity.Entities
 
         public virtual void AddClaim(Claim claim)
         {
-            Claims.Add(new MongoIdentityUserClaim(claim));
+            Claims.Add(new IdentityUserClaim(claim));
         }
         public virtual void RemoveClaim(Claim claim)
         {
@@ -113,14 +81,14 @@ namespace Raa.AspNetCore.MongoDataContext.Identity.Entities
 
     }
 
-    public class MongoIdentityUser : MongoIdentityUser<ObjectId>
+    public class IdentityUser : IdentityUser<string>
     {
-        public MongoIdentityUser()
+        public IdentityUser()
         {
-            Id = ObjectId.GenerateNewId();
+            Id = ObjectId.GenerateNewId().ToString();
         }
 
-        public MongoIdentityUser(string userName) : this()
+        public IdentityUser(string userName) : this()
         {
             UserName = userName;
         }

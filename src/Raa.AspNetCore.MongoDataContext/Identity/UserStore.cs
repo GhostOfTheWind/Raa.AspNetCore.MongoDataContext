@@ -20,7 +20,9 @@ namespace Raa.AspNetCore.MongoDataContext.Identity
         IUserTwoFactorStore<TUser>,
         IUserEmailStore<TUser>,
         IUserLockoutStore<TUser>,
-        IUserPhoneNumberStore<TUser>
+        IUserPhoneNumberStore<TUser>,
+        IUserTwoFactorRecoveryCodeStore<TUser>,
+        IUserAuthenticatorKeyStore<TUser>
 
         where TUser : MongoIdentityUser
     {
@@ -471,5 +473,95 @@ namespace Raa.AspNetCore.MongoDataContext.Identity
 
             return IdentityResult.Success;
         }
+
+        private const string InternalLoginProvider = "[AspNetUserStore]";
+        private const string AuthenticatorKeyTokenName = "AuthenticatorKey";
+        private const string RecoveryCodeTokenName = "RecoveryCodes";
+
+        public Task<MongoIdentityUserToken> FindTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) { throw new ArgumentNullException(nameof(user)); }
+
+            var token = user.Tokens.Where(t => 
+                t.LoginProvider == loginProvider &&
+                t.Name == name
+            ).FirstOrDefault();
+
+            return Task.FromResult(token);
+        }
+
+        public virtual async Task<string> GetTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) { throw new ArgumentNullException(nameof(user)); }
+
+            var entry = await FindTokenAsync(user, loginProvider, name, cancellationToken);
+            return entry?.Value;
+        }
+
+        public virtual async Task SetTokenAsync(TUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) { throw new ArgumentNullException(nameof(user)); }
+
+            var token = await FindTokenAsync(user, loginProvider, name, cancellationToken);
+            if (token == null)
+            {
+                user.AddToken(new MongoIdentityUserToken { LoginProvider = loginProvider, Name = name, Value = value});
+            }
+            else
+            {
+                token.Value = value;
+            }
+        }
+
+        
+
+        public Task ReplaceCodesAsync(TUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+        {
+            var mergedCodes = string.Join(";", recoveryCodes);
+            return SetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, mergedCodes, cancellationToken);
+        }
+
+        public async Task<bool> RedeemCodeAsync(TUser user, string code, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) { throw new ArgumentNullException(nameof(user)); }
+            if (code == null) { throw new ArgumentNullException(nameof(code)); }
+
+            var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? "";
+            var splitCodes = mergedCodes.Split(';');
+            if (splitCodes.Contains(code))
+            {
+                var updatedCodes = new List<string>(splitCodes.Where(s => s != code));
+                await ReplaceCodesAsync(user, updatedCodes, cancellationToken);
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<int> CountCodesAsync(TUser user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) { throw new ArgumentNullException(nameof(user)); }
+
+            var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? "";
+            if (mergedCodes.Length > 0)
+            {
+                return mergedCodes.Split(';').Length;
+            }
+            return 0;
+        }
+
+        public Task SetAuthenticatorKeyAsync(TUser user, string key, CancellationToken cancellationToken) 
+            => SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
+
+
+
+        public Task<string> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken) 
+            => GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
+
+
     }
 }

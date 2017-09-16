@@ -28,7 +28,7 @@ namespace basicSample
 
             // Create mongoDb context and generate Item's repository.
 
-            services.AddMongoDataContext<MongoDataContext>(o => { o.ConnectionString = "mongodb://raa:raa@ds133044.mlab.com:33044/asptest"; o.DatabaseName = "asptest"; })
+            services.AddMongoDataContext<MongoDataContext>(o => { o.ConnectionString = "MONGO_CONNECTION_STRING"; o.DatabaseName = "MONGO_DB_NAME"; })
                 .CreateRepository<Item>();
 
             services.AddMvc();
