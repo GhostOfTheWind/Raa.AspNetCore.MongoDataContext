@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace basicApiSample.Entities
 {
-    public class Item : IEntity<ObjectId>
+    public class Item : IEntity
     {
         public ObjectId Id { get; set; }
         public string Name { get; set; }
