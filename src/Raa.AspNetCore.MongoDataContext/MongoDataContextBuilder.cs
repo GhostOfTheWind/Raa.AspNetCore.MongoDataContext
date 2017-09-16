@@ -51,7 +51,7 @@ namespace Raa.AspNetCore.MongoDataContext
 
                 var instanceParams = new object[] { dataContext };
 
-                if(paramsCount > 1)
+                if(paramsCount > 1 && collectionName != null)
                 {
                     instanceParams = new object[] { dataContext, collectionName};
                 }

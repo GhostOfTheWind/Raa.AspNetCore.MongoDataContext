@@ -25,7 +25,9 @@ namespace basicSample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.BuildServiceProvider();
+            /*
+                Create mongoDb context and generate Item's repository.
+             */
             services.AddMongoDataContext<MongoDataContext>(o => { o.ConnectionString = "mongodb://raa:raa@ds133044.mlab.com:33044/asptest"; o.DatabaseName = "asptest"; })
                 .CreateRepository<Item>();
 
@@ -39,6 +41,7 @@ namespace basicSample
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStatusCodePages();
 
             app.UseMvc();
         }

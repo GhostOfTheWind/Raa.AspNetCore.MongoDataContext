@@ -36,15 +36,14 @@ namespace Raa.AspNetCore.MongoDataContext.Repository
 
         public Repository(TContext context, string collectionName)
         {
-            _collectionName = collectionName;
+            _collectionName = collectionName != null? collectionName : typeof(TEntity).Name + "s";
             _context = context;
 
-            _collection = _context.Database.GetCollection<TEntity>(collectionName);
+            _collection = _context.Database.GetCollection<TEntity>(_collectionName);
         }
 
-        public Repository(TContext context) : this(context, typeof(TEntity).Name + "s")
+        public Repository(TContext context) : this(context, null)
         {
-            _context = context;
         }
 
         public async Task<TEntity> InsertAsync(TEntity e)
@@ -84,8 +83,19 @@ namespace Raa.AspNetCore.MongoDataContext.Repository
 
         public Task<TEntity> FindByIdAsync(ObjectId id)
         {
+
             return _collection.Find(u => u.Id == id).FirstOrDefaultAsync();
         }
+
+        public Task<TEntity> FindByIdAsync(string id)
+        {
+            ObjectId parsedId;
+            ObjectId.TryParse(id, out parsedId);
+
+            return FindByIdAsync(parsedId);
+        }
+            
+        
 
         public Task<TEntity> FindOneAsync(Expression<Func<TEntity, bool>> filterFunc)
         {
