@@ -16,22 +16,33 @@ namespace Raa.AspNetCore.MongoDataContext.Identity
         {
             var Services = builder.Services;
 
-            InitStoreAndRepo(builder.UserType, Services, typeof(IUserStore<>), typeof(UserStore<>));
-            InitStoreAndRepo(builder.RoleType, Services, typeof(IRoleStore<>), typeof(RoleStore<>));
+
+            InitRepo(Services, typeof(UserRepository<>), builder.UserType);
+            InitRepo(Services, typeof(RoleRepository<>), builder.RoleType);
+
+            InitStore(builder.UserType, Services, typeof(IUserStore<>), typeof(UserStore<>));
+            InitStore(builder.RoleType, Services, typeof(IRoleStore<>), typeof(RoleStore<>));
 
             return builder;
         }
 
-        private static void InitStoreAndRepo(Type type, IServiceCollection Services, Type service, Type implementation)
+        private static void InitStore(Type type, IServiceCollection Services, Type service, Type implementation)
         {
             var repoType = typeof(Repository<>).MakeGenericType(type);
 
-            ServiceDescriptor serviceDescriptor = new ServiceDescriptor(repoType, repoType, ServiceLifetime.Scoped);
-            Services.Add(serviceDescriptor);
+            
 
             var genericServiceType = service.MakeGenericType(type);
             var genericImplementationType = implementation.MakeGenericType(type);
             Services.TryAddScoped(genericServiceType, genericImplementationType);
+        }
+
+        private static void InitRepo(IServiceCollection Services, Type repoType, Type eneityType)
+        {
+            var genericRepoType = repoType.MakeGenericType(eneityType);
+
+            ServiceDescriptor serviceDescriptor = new ServiceDescriptor(genericRepoType, genericRepoType, ServiceLifetime.Scoped);
+            Services.Add(serviceDescriptor);
         }
     }
 

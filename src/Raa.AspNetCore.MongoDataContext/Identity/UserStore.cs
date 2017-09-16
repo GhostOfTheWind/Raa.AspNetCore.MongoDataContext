@@ -27,7 +27,7 @@ namespace Raa.AspNetCore.MongoDataContext.Identity
 
         Repository<TUser> _userRepo;
 
-        public UserStore(Repository<TUser> userRepo)
+        public UserStore(UserRepository<TUser> userRepo)
         {
             _userRepo = userRepo;
         }

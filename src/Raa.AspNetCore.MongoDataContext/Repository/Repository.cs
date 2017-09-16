@@ -16,21 +16,35 @@ namespace Raa.AspNetCore.MongoDataContext.Repository
         {
 
         }
+
+        public Repository(MongoDataContext context, string collectionName) : base(context, collectionName)
+        {
+        }
     }
     public class Repository<TEntity, TContext>
         where TContext : MongoDataContext
         where TEntity : IEntity<ObjectId>
     {
-        public readonly TContext _context;
+        private string _collectionName;
+        public string CollectionName => _collectionName; 
 
-        public readonly IMongoCollection<TEntity> _collection;
+
+        private TContext _context;
+
+        private IMongoCollection<TEntity> _collection;
         public virtual IQueryable<TEntity> List => _collection.AsQueryable();
 
+        public Repository(TContext context, string collectionName)
+        {
+            _collectionName = collectionName;
+            _context = context;
 
-        public Repository(TContext context)
+            _collection = _context.Database.GetCollection<TEntity>(collectionName);
+        }
+
+        public Repository(TContext context) : this(context, typeof(TEntity).Name + "s")
         {
             _context = context;
-            _collection = _context.Database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
         public async Task<TEntity> InsertAsync(TEntity e)

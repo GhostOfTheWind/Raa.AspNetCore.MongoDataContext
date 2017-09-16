@@ -3,24 +3,23 @@ using MongoDB.Bson;
 using Raa.AspNetCore.MongoDataContext.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
 namespace Raa.AspNetCore.MongoDataContext
 {
-    public class MongoDataContextBuilder
+    public class MongoDataContextBuilder<TContext>
+        where TContext : MongoDataContext
     {
         public IServiceCollection Services { get; private set; }
-        public Type ContextType { get; private set; }
 
-        public MongoDataContextBuilder(Type context, IServiceCollection serviceCollection)
+        public MongoDataContextBuilder(IServiceCollection serviceCollection)
         {
-            ContextType = context;
-
             Services = serviceCollection;
         }
 
-        private MongoDataContextBuilder Add(Type serviceType)
+        private MongoDataContextBuilder<TContext> Add(Type serviceType)
         {
             ServiceDescriptor serviceDescriptor = new ServiceDescriptor(serviceType, serviceType, ServiceLifetime.Scoped);
             Services.Add(serviceDescriptor);
@@ -28,7 +27,7 @@ namespace Raa.AspNetCore.MongoDataContext
             return this;
         }
 
-        public MongoDataContextBuilder AddRepository<TRepository>()
+        public MongoDataContextBuilder<TContext> AddRepository<TRepository>(string collectionName = null)
             where TRepository : class
         {
             Type baseType = typeof(Repository<>);
@@ -37,16 +36,48 @@ namespace Raa.AspNetCore.MongoDataContext
             var isTypeRepository = isBaseType(repoType, baseType);
             if (!isTypeRepository) throw new ArgumentException(typeof(TRepository).Name);
 
+            
 
-            return Add(repoType);
+            ServiceDescriptor serviceDescriptor = new ServiceDescriptor(repoType, p => {
+                var dataContext = p.GetRequiredService(typeof(TContext)) as TContext;
+
+                var repoConstructors = repoType.GetConstructors().ToList();
+                int paramsCount = 0;
+
+                foreach (var constructor in repoConstructors)
+                {
+                    paramsCount = Math.Max(paramsCount, constructor.GetParameters().Length);
+                }
+
+                var instanceParams = new object[] { dataContext };
+
+                if(paramsCount > 1)
+                {
+                    instanceParams = new object[] { dataContext, collectionName};
+                }
+                
+                return Activator.CreateInstance(repoType, instanceParams); //todo: something to replace Activator
+            }, ServiceLifetime.Scoped);
+            
+            Services.Add(serviceDescriptor);
+
+            return this;
         }
 
-        public MongoDataContextBuilder CreateRepository<TEntity>()
+        public MongoDataContextBuilder<TContext> CreateRepository<TEntity>(string collectionName = null)
             where TEntity : IEntity<ObjectId>
         {
             Type repoType = typeof(Repository<>).MakeGenericType(typeof(TEntity));
+            
+            ServiceDescriptor serviceDescriptor = new ServiceDescriptor(repoType, p => {
+                var dataContext = p.GetRequiredService(typeof(TContext)) as TContext;
 
-            return Add(repoType);
+                return new Repository<TEntity>(dataContext, collectionName);
+            }, ServiceLifetime.Scoped);
+
+            Services.Add(serviceDescriptor);
+
+            return this;
         }
 
 

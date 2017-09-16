@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Raa.AspNetCore.MongoDataContext;
-using MongoDataContextSample.Entities;
+using basicApiSample.Entities;
 
-namespace MongoDataContextSample
+namespace basicSample
 {
     public class Startup
     {
@@ -23,10 +25,8 @@ namespace MongoDataContextSample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMongoDataContext<MongoDataContext>(o => {
-                o.ConnectionString = "mongodb://raa:raa@ds133044.mlab.com:33044/asptest";
-                o.DatabaseName = "aspnet";
-            })
+            services.BuildServiceProvider();
+            services.AddMongoDataContext<MongoDataContext>(o => { o.ConnectionString = "mongodb://raa:raa@ds133044.mlab.com:33044/asptest"; o.DatabaseName = "asptest"; })
                 .CreateRepository<Item>();
 
             services.AddMvc();
@@ -38,21 +38,9 @@ namespace MongoDataContextSample
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
         }
     }
 }

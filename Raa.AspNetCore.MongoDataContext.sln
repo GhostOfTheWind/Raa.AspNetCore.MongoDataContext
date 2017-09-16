@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raa.AspNetCore.MongoDataCon
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F5050FD8-9807-44FD-99F3-CB8B6D7ECE69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDataContextSample", "samples\MongoDataContextSample\MongoDataContextSample.csproj", "{205AA283-C24C-4A64-A859-C73376C7FDB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "basicApiSample", "samples\basicApiSample\basicApiSample.csproj", "{B6F194D2-1F8D-47BF-8421-45058B1D5860}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +19,16 @@ Global
 		{BAEA22F0-35DF-4C7D-BAE6-858213BD8C14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAEA22F0-35DF-4C7D-BAE6-858213BD8C14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAEA22F0-35DF-4C7D-BAE6-858213BD8C14}.Release|Any CPU.Build.0 = Release|Any CPU
-		{205AA283-C24C-4A64-A859-C73376C7FDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{205AA283-C24C-4A64-A859-C73376C7FDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{205AA283-C24C-4A64-A859-C73376C7FDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{205AA283-C24C-4A64-A859-C73376C7FDB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F194D2-1F8D-47BF-8421-45058B1D5860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F194D2-1F8D-47BF-8421-45058B1D5860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F194D2-1F8D-47BF-8421-45058B1D5860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F194D2-1F8D-47BF-8421-45058B1D5860}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{205AA283-C24C-4A64-A859-C73376C7FDB9} = {F5050FD8-9807-44FD-99F3-CB8B6D7ECE69}
+		{B6F194D2-1F8D-47BF-8421-45058B1D5860} = {F5050FD8-9807-44FD-99F3-CB8B6D7ECE69}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19C7D2B8-ABC0-4D29-974E-4FC34F441C22}
