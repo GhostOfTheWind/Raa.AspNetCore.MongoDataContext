@@ -5,6 +5,9 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>A mongoDb provider for Asp.net Core 2.0, allows you to create MongoDb's contexts, repositories and integrate with Identity.</Description>
+    <Version>1.0.2</Version>
+    <Authors>Mateusz Szmytko (Raa)</Authors>
+    <Company />
   </PropertyGroup>
 
   <ItemGroup>
